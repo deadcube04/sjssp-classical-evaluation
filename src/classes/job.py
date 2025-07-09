@@ -1,3 +1,4 @@
+
 class Jssp_job:
     def __init__(self, name: str, usable_machines: list, equipments_needed: list, duration: int):
         self.name = name

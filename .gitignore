@@ -2,3 +2,9 @@
 todo.txt
 .vscode
 todo.txt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.pyd

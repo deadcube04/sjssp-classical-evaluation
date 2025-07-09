@@ -1,6 +1,6 @@
 # import os
 # import importlib.util
-from job import Jssp_job
+from classes.job import Jssp_job
 
 # def import_tests_cases(nome_dict : str) -> dict:
 
