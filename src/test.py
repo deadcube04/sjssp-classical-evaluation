@@ -138,13 +138,21 @@ def plot_gantt(schedule):
 
 
 data = {
-    "jobs": {
-        "job_1": [([1], [], 1)],
-        "job_2": [([2], [], 1)],
-    },
-    "machine_downtimes": {},
-    "timespan": 2
-}
+        "jobs" : {
+            "job_1" : [([1, 3],[],1)],
+            "job_2" : [([2, 3],[],1)],
+            "job_3" : [([2, 3],[],1)],
+            "job_4" : [([1, 2, 3],[],2)],
+            "job_5" : [([1],[],3)],
+            "job_6" : [([1],[],2)],
+            "job_7" : [([1],[],4)],
+            "job_8" : [([1],[],1)],    
+            "job_9" : [([2],[],10)],
+            "job_10": [([3],[],1)],
+        },
+        "machine_downtimes" : {},
+        "timespan": 10
+        }
 
 # Instância do problema
 instance = jssp(data)
@@ -156,6 +164,7 @@ problem = {
     "obj_func": fitness_func,
     "bounds": [FloatVar(lb=0.0, ub=1.0) for _ in range(num_ops)],  # ✅ lista de objetos FloatVar
     "minmax": "min",
+    "log_to": None,  # Não registrar logs
 }
 
 # Rodando uma heurística
