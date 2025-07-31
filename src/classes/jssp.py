@@ -27,7 +27,8 @@ class jssp:
             operations.append({
                 "job": job.name,
                 "machines": job.usable_machines,
-                "duration": job.duration
+                "duration": job.duration,
+                "equipments": job.equipments_needed
             })
         return operations
     
