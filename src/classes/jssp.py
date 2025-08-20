@@ -1,5 +1,6 @@
 import numpy as np
 from classes.job import Jssp_job
+from classes.operation import Operation
 
 
 
@@ -11,30 +12,37 @@ class jssp:
         self.process_data(data)
 
     def process_data(self, data: dict):
-       
-        for job_name, details in data.get("jobs", {}).items():
-            job = Jssp_job(
-                name=job_name,
-                usable_machines=details[0][0],
-                equipments_needed=details[0][1],
-                duration=details[0][2]
-            )
+        jobs_data = data.get("jobs", {})
+        for job_name, operations_details in jobs_data.items():
+            operations = []
+            for op_data in operations_details:
+                machines = op_data[0]
+                equipments = op_data[1]
+                duration = op_data[2]
+                operation = Operation(machines, equipments, duration)
+                operations.append(operation)
+            job = Jssp_job(name=job_name, operations=operations)
             self.jobs.append(job)
+        self.machine_downtimes = data.get("machine_downtimes", {})
+        self.timespan = data.get("timespan", None)
 
     def get_flattened_operations(self):
         operations = []
         for job in self.jobs:
-            operations.append({
-                "job": job.name,
-                "machines": job.usable_machines,
-                "duration": job.duration,
-                "equipments": job.equipments_needed
-            })
+            for operation in job.operations:
+                op_details = operation.getOperationDetails()
+                op_details["job"] = job.name  # Adicionar o nome do job
+                operations.append(op_details)
         return operations
     
     
     def __str__(self) -> str:
-        return "\n".join([f"Job: {job.name}, Usable Machines: {job.usable_machines}, Equipments Needed: {job.equipments_needed}, Duration: {job.duration}" for job in self.jobs])
+        result = []
+        for job in self.jobs:
+            result.append(f"Job: {job.name}")
+            for idx, operation in enumerate(job.operations):
+                result.append(f"  Operation {idx+1}: Machines: {operation.machines}, Equipments: {operation.equipments}, Duration: {operation.duration}")
+        return "\n".join(result)
 
 # data = import_tests_cases("test")
 # jsspTest = jssp(data)
