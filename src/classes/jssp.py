@@ -14,14 +14,8 @@ class jssp:
     def process_data(self, data: dict):
         jobs_data = data.get("jobs", {})
         for job_name, operations_details in jobs_data.items():
-            operations = []
-            for op_data in operations_details:
-                machines = op_data[0]
-                equipments = op_data[1]
-                duration = op_data[2]
-                operation = Operation(machines, equipments, duration)
-                operations.append(operation)
-            job = Jssp_job(name=job_name, operations=operations)
+            # Passar os dados brutos das operações para Jssp_job processar
+            job = Jssp_job(job_name, operations_details)
             self.jobs.append(job)
         self.machine_downtimes = data.get("machine_downtimes", {})
         self.timespan = data.get("timespan", None)
@@ -32,6 +26,7 @@ class jssp:
             for operation in job.operations:
                 op_details = operation.getOperationDetails()
                 op_details["job"] = job.name  # Adicionar o nome do job
+                op_details["operation_id"] = operation.id  # Adicionar o ID da operação explicitamente
                 operations.append(op_details)
         return operations
     
