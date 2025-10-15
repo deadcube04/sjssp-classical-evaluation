@@ -12,11 +12,15 @@ class jssp:
         self.process_data(data)
 
     def process_data(self, data: dict):
+
         jobs_data = data.get("jobs", {})
+
         for job_name, operations_details in jobs_data.items():
-            # Passar os dados brutos das operações para Jssp_job processar
+
             job = Jssp_job(job_name, operations_details)
+            print(operations_details)
             self.jobs.append(job)
+
         self.machine_downtimes = data.get("machine_downtimes", {})
         self.timespan = data.get("timespan", None)
 
