@@ -267,7 +267,7 @@ instancia_mk01_pequena_5x4 = {
         ]
     },
     "machine_downtimes": {},
-    "timespan": 17
+    "timespan": 545
 }
 
 # Adding instances from Results folder
