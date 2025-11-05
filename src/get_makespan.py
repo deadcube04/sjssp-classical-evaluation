@@ -147,7 +147,7 @@ def solve_fjsp_with_equipment(instance_json):
 # Example usage with equipment constraints:
 if __name__ == "__main__":
     # Updated example with equipment constraints
-    json_data = {
+    json_data =  {
     "jobs": {
         "job_1": [
             ([1, 2, 3, 4], [1], 29),
@@ -191,7 +191,7 @@ if __name__ == "__main__":
         ]
     },
     "machine_downtimes": {},
-    "timespan": 99
+    "timespan": 99999
 }
 
 
