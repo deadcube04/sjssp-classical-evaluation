@@ -4,10 +4,12 @@ from ortools.sat.python import cp_model
 
 def solve_fjsp_with_equipment(instance_json):
     """
-    Solve Flexible Job Shop Scheduling Problem (FJSP) with equipment constraints.
+    Solve Flexible Job Shop Scheduling Problem (FJSP) with equipment constraints and machine downtimes.
     Each operation can be processed on alternative machines and requires specific equipment.
+    Machines can have downtime periods during which they cannot process operations.
     """
     jobs_data = instance_json["jobs"]
+    machine_downtimes = instance_json.get("machine_downtimes", {})
 
     model = cp_model.CpModel()
 
@@ -44,6 +46,21 @@ def solve_fjsp_with_equipment(instance_json):
                 interval_machine = model.NewOptionalIntervalVar(
                     start_var, duration, end_var, is_present_machine, f"interval_machine{suffix}_m{m}")
                 machine_interval_vars.append((m, interval_machine, is_present_machine))
+                
+                # Add machine downtime constraints
+                if m in machine_downtimes:
+                    downtime_start, downtime_end = machine_downtimes[m]
+                    # If this machine is selected for this operation, ensure it doesn't overlap with downtime
+                    # The operation must either finish before downtime starts OR start after downtime ends
+                    
+                    # Create a boolean variable to indicate which case applies
+                    before_downtime = model.NewBoolVar(f"before_downtime{suffix}_m{m}")
+                    
+                    # If machine is selected and operation is before downtime: end_var <= downtime_start
+                    model.Add(end_var <= downtime_start).OnlyEnforceIf([is_present_machine, before_downtime])
+                    
+                    # If machine is selected and operation is after downtime: start_var >= downtime_end
+                    model.Add(start_var >= downtime_end).OnlyEnforceIf([is_present_machine, before_downtime.Not()])
 
             # Create optional intervals for alternative equipment
             for e in equipment:
@@ -136,7 +153,12 @@ def solve_fjsp_with_equipment(instance_json):
                 machine_str = f"Machine {selected_machine}" if selected_machine else "No machine"
                 equipment_str = f"Equipment {selected_equipment}" if selected_equipment else "No equipment"
                 
-                print(f"  Operation {op_id}: start={start}, duration={duration}, {machine_str}, {equipment_str}")
+                downtime_info = ""
+                if selected_machine and selected_machine in machine_downtimes:
+                    dt_start, dt_end = machine_downtimes[selected_machine]
+                    downtime_info = f", Machine downtime: [{dt_start}, {dt_end}]"
+                
+                print(f"  Operation {op_id}: start={start}, duration={duration}, {machine_str}, {equipment_str}{downtime_info}")
         
         return solver.ObjectiveValue()
     else:
