@@ -18,7 +18,6 @@ class jssp:
         for job_name, operations_details in jobs_data.items():
 
             job = Jssp_job(job_name, operations_details)
-            print(operations_details)
             self.jobs.append(job)
 
         self.machine_downtimes = data.get("machine_downtimes", {})
@@ -43,9 +42,6 @@ class jssp:
                 result.append(f"  Operation {idx+1}: Machines: {operation.machines}, Equipments: {operation.equipments}, Duration: {operation.duration}")
         return "\n".join(result)
 
-# data = import_tests_cases("test")
-# jsspTest = jssp(data)
-# print(jsspTest.__str__())
 
 
 
