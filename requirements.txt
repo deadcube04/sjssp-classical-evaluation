@@ -6,3 +6,4 @@ scipy
 seaborn
 ortools
 dotenv
+ortools

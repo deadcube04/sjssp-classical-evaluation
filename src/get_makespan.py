@@ -48,19 +48,20 @@ def solve_fjsp_with_equipment(instance_json):
                 machine_interval_vars.append((m, interval_machine, is_present_machine))
                 
                 # Add machine downtime constraints
+                # machine_downtimes[m] is a list of time points where the machine is unavailable
                 if m in machine_downtimes:
-                    downtime_start, downtime_end = machine_downtimes[m]
-                    # If this machine is selected for this operation, ensure it doesn't overlap with downtime
-                    # The operation must either finish before downtime starts OR start after downtime ends
-                    
-                    # Create a boolean variable to indicate which case applies
-                    before_downtime = model.NewBoolVar(f"before_downtime{suffix}_m{m}")
-                    
-                    # If machine is selected and operation is before downtime: end_var <= downtime_start
-                    model.Add(end_var <= downtime_start).OnlyEnforceIf([is_present_machine, before_downtime])
-                    
-                    # If machine is selected and operation is after downtime: start_var >= downtime_end
-                    model.Add(start_var >= downtime_end).OnlyEnforceIf([is_present_machine, before_downtime.Not()])
+                    downtime_list = machine_downtimes[m]
+                    # For each downtime point, ensure it doesn't fall within [start_var, end_var)
+                    for downtime_point in downtime_list:
+                        
+                        # Create boolean: is downtime_point before the operation?
+                        before_op = model.NewBoolVar(f"before_op{suffix}_m{m}_dt{downtime_point}")
+                        
+                        # If machine is selected and downtime is before: downtime_point < start_var
+                        model.Add(downtime_point < start_var).OnlyEnforceIf([is_present_machine, before_op])
+                        
+                        # If machine is selected and downtime is not before: downtime_point >= end_var
+                        model.Add(downtime_point >= end_var).OnlyEnforceIf([is_present_machine, before_op.Not()])
 
             # Create optional intervals for alternative equipment
             for e in equipment:
@@ -155,8 +156,8 @@ def solve_fjsp_with_equipment(instance_json):
                 
                 downtime_info = ""
                 if selected_machine and selected_machine in machine_downtimes:
-                    dt_start, dt_end = machine_downtimes[selected_machine]
-                    downtime_info = f", Machine downtime: [{dt_start}, {dt_end}]"
+                    downtime_list = machine_downtimes[selected_machine]
+                    downtime_info = f", Machine downtimes: {downtime_list}"
                 
                 print(f"  Operation {op_id}: start={start}, duration={duration}, {machine_str}, {equipment_str}{downtime_info}")
         
@@ -171,49 +172,12 @@ if __name__ == "__main__":
     # Updated example with equipment constraints
     json_data =  {
     "jobs": {
-        "job_1": [
-            ([1, 2, 3, 4], [1], 29),
-            ([1, 3, 4], [1], 43),
-            ([2, 3, 4], [1], 16),
-            ([1, 2], [1], 71),         # Min time (M1, M2)
-            ([2, 3], [1], 32),         # Min time (M2, M3)
-            ([1, 2, 3, 4], [1], 43)
-        ],
-        "job_2": [
-            ([2, 3, 4], [1], 29),
-            ([1, 2, 4], [1], 63),
-            ([2, 3], [1], 41),
-            ([1, 2, 3, 4], [1], 53),
-            ([3, 4], [1], 24),
-            ([1, 2, 3], [1], 28)
-        ],
-        "job_3": [
-            ([1, 3, 4], [2], 21),
-            ([2, 3, 4], [2], 43),
-            ([1, 2, 4], [2], 20),
-            ([3], [2], 89),
-            ([1, 2, 3, 4], [2], 43),
-            ([2, 4], [2], 36)
-        ],
-        "job_4": [
-            ([1, 2, 4], [2], 52),      # Min time (M1, M2, M4)
-            ([1, 2, 3], [2], 16),
-            ([3, 4], [2], 61),
-            ([1, 2, 3], [2], 40),
-            ([1, 2, 4], [2], 61),
-            ([3, 4], [2], 63)
-        ],
-        "job_5": [
-            ([2, 3, 4], [3], 29),
-            ([1, 3, 4], [3], 51),
-            ([2, 3], [3], 41),
-            ([1, 2, 4], [3], 53),
-            ([1, 3], [3], 46),
-            ([2, 3, 4], [3], 28)
-        ]
+        "job_1": [([1, 2, 3], [], 1)],
+        "job_2": [([1, 2, 3], [], 1)],
+        "job_3": [([1, 2, 3], [], 1)]
     },
-    "machine_downtimes": {},
-    "timespan": 99999
+    "machine_downtimes": {1: [1, 2], 2: [0, 2], 3: [0, 1]},
+    "timespan": 10
 }
 
 
