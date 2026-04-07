@@ -171,7 +171,7 @@ instancia_mk01_com_equipamentos = {
         ]
     },
     "machine_downtimes": {},
-    "timespan": 528
+    "timespan": 711
 }
 
 instancia_simples_3x3 = {
@@ -407,7 +407,7 @@ TC_015 = {
         "job_3": [([1, 2, 3, 4], [3], 1)]
     },
     "machine_downtimes": {},
-    "timespan": 3
+    "timespan": 1
 }
 
 TC_016 = {
