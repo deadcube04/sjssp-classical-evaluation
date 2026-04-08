@@ -12,3 +12,4 @@ pamela
 tests/__pycache__/test1.cpython-310.pyc
 *.csv
 Results
+*.pdf
