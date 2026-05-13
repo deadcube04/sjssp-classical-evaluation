@@ -71,7 +71,7 @@ TC_MK01_NORMAL = {'jobs': {'job_1': [([1, 4], [], 7),
                      ([1, 5], [], 6),
                      ([1, 2, 4], [], 2)]},
  'machine_downtimes': {},
- 'timespan': None}
+ 'timespan': 47.0}
 
 TC_MK01_ADAPTADO = {'jobs': {'job_1': [([1, 4], [1], 7),
                     ([2, 4, 6], [2, 3], 3),
@@ -144,7 +144,7 @@ TC_MK01_ADAPTADO = {'jobs': {'job_1': [([1, 4], [1], 7),
                      ([1, 5], [3], 6),
                      ([1, 2, 4], [1, 2], 2)]},
  'machine_downtimes': {1: [2, 7], 2: [3, 9], 3: [1, 8], 4: [2, 6], 5: [3, 8], 6: [1, 7]},
- 'timespan': None}
+ 'timespan': 160.0}
 
 TC_MK07_NORMAL = {'jobs': {'job_1': [([2, 4], [], 11),
                     ([3, 4, 5], [], 8),
@@ -247,7 +247,7 @@ TC_MK07_NORMAL = {'jobs': {'job_1': [([2, 4], [], 11),
                      ([1, 5], [], 9),
                      ([1, 3, 5], [], 6)]},
  'machine_downtimes': {},
- 'timespan': None}
+ 'timespan': 210.0}
 
 TC_MK07_ADAPTADO = {'jobs': {'job_1': [([2, 4], [3], 11),
                     ([3, 4, 5], [4, 5], 8),
@@ -350,7 +350,7 @@ TC_MK07_ADAPTADO = {'jobs': {'job_1': [([2, 4], [3], 11),
                      ([1, 5], [4], 9),
                      ([1, 3, 5], [1, 2], 6)]},
  'machine_downtimes': {1: [2, 13], 2: [3, 15], 3: [1, 14], 4: [2, 12], 5: [3, 14]},
- 'timespan': None}
+ 'timespan': 505.0}
 
 TC_MK10_NORMAL = {'jobs': {'job_1': [([4, 7], [], 13),
                     ([4, 8, 15], [], 14),
@@ -653,7 +653,7 @@ TC_MK10_NORMAL = {'jobs': {'job_1': [([4, 7], [], 13),
                      ([1, 2, 9, 10], [], 17),
                      ([6, 7, 8, 14, 15], [], 18)]},
  'machine_downtimes': {},
- 'timespan': None}
+ 'timespan': 276.0}
 
 TC_MK10_ADAPTADO = {'jobs': {'job_1': [([4, 7], [3], 13),
                     ([4, 8, 15], [4, 5], 14),
@@ -970,7 +970,7 @@ TC_MK10_ADAPTADO = {'jobs': {'job_1': [([4, 7], [3], 13),
                        13: [3, 12],
                        14: [4, 14],
                        15: [2, 13]},
- 'timespan': None}
+ 'timespan': 2058.0}
 
 TC_MK11_NORMAL = {'jobs': {'job_1': [([2, 4], [], 29),
                     ([4, 5], [], 25),
@@ -1213,7 +1213,7 @@ TC_MK11_NORMAL = {'jobs': {'job_1': [([2, 4], [], 29),
                      ([3, 5], [], 25),
                      ([2, 4], [], 21)]},
  'machine_downtimes': {},
- 'timespan': None}
+ 'timespan': 962.0}
 
 TC_MK11_ADAPTADO = {'jobs': {'job_1': [([2, 4], [1], 29),
                     ([4, 5], [1, 2], 25),
@@ -2212,6 +2212,5 @@ INSTANCIAS_MK = {
 }
 
 INSTANCIAS_PARA_VISUALIZACAO = {
-    "TC_009": TC_009,
     **INSTANCIAS_MK,
 }
